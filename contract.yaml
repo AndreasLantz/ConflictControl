@@ -1,0 +1,557 @@
+---
+openapi: "3.0.1"
+info:
+  title: "ConflictControl"
+  contact:
+    name: "Andreas Lantz"
+    email: "andreas.lantz@arbetsformedlingen.se"
+  version: 1.0.0
+
+servers:
+- url: "https://bar-utveckling.arbetsformedlingen.se/prweb/PRRestService/BARWebSvcs/v1/"
+tags:
+- name: "BARWebSvcs"
+
+paths:
+  /conflicts/{ssn}/{supporttype}:
+    get:
+      tags:
+      - "BARWebSvcs"
+      parameters:
+      - name: "ssn"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "supporttype"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "af-trackingid"
+        in: "header"
+        description: "Transaction ID"
+        schema:
+          type: "string"
+      - name: "af-systemid"
+        in: "header"
+        description: "ID of consuming system"
+        schema:
+          type: "string"
+      - name: "af-enduserid"
+        in: "header"
+        description: "ID of consuming end user"
+        schema:
+          type: "string"
+      - name: "af-environment"
+        in: "header"
+        description: "Which environment the request concerns"
+        schema:
+          type: "string"
+      responses:
+        405:
+          description: "GET is not allowed."
+          headers:
+            allow:
+              schema:
+                type: "string"
+                enum:
+                - "\"POST\""
+            af-environment:
+              schema:
+                type: "string"
+            af-trackingid:
+              schema:
+                type: "string"
+            af-systemid:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                type: "object"
+    put:
+      tags:
+      - "BARWebSvcs"
+      parameters:
+      - name: "ssn"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "supporttype"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "af-trackingid"
+        in: "header"
+        description: "Transaction ID"
+        schema:
+          type: "string"
+      - name: "af-systemid"
+        in: "header"
+        description: "ID of consuming system"
+        schema:
+          type: "string"
+      - name: "af-enduserid"
+        in: "header"
+        description: "ID of consuming end user"
+        schema:
+          type: "string"
+      - name: "af-environment"
+        in: "header"
+        description: "Which environment the request concerns"
+        schema:
+          type: "string"
+      responses:
+        405:
+          description: "PUT is not allowed."
+          headers:
+            allow:
+              schema:
+                type: "string"
+                enum:
+                - "\"POST\""
+            af-environment:
+              schema:
+                type: "string"
+            af-trackingid:
+              schema:
+                type: "string"
+            af-systemid:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                type: "object"
+    post:
+      tags:
+      - "BARWebSvcs"
+      parameters:
+      - name: "ssn"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "supporttype"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "client_id"
+        in: "query"
+        description: "Client ID"
+        schema:
+          type: "string"
+      - name: "client_secret"
+        in: "query"
+        description: "Client Secret"
+        schema:
+          type: "string"
+      - name: "af-trackingid"
+        in: "header"
+        description: "Transaction ID"
+        schema:
+          type: "string"
+      - name: "af-systemid"
+        in: "header"
+        description: "ID of consuming system"
+        schema:
+          type: "string"
+      - name: "af-enduserid"
+        in: "header"
+        description: "ID of consuming end user"
+        schema:
+          type: "string"
+      - name: "af-environment"
+        in: "header"
+        description: "Which environment the request concerns"
+        schema:
+          type: "string"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestBody'
+            example:
+              Request:
+                EndDate: '20200102'
+                Scope: 10
+                StartDate: '20200101'
+                SupportsToIgnore:
+                  - Id: '12345'
+                  - Id: 'abcde'
+                  - Id: 'abcde-12345'
+      responses:
+        200:
+          description: "Successful response."
+          headers:
+            af-environment:
+              schema:
+                type: "string"
+            af-trackingid:
+              schema:
+                type: "string"
+            af-systemid:
+              schema:
+                type: "string"
+            af-enduserid:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                TotalResults: 2
+                ConflictingCases:
+                  - pyID: '99466'
+                    StartDate: '2020-03-16'
+                    EndDate: '2020-05-14'
+                    Scope: 0
+                    SupportTypeCode: 'UTA'
+                    pySystemName: 'AIS'
+                    Conflicts:
+                      - pyFaultCode: 'ERROR'
+                        pyFaultDetail: 'conflict_scope_above_100'
+                        pyFaultReason: 'Det finns överlappande anvisning som meddelats Försäkringskassan och som tillsammans med aktuellt ärende överstiger 100 % i omfattning.'
+                      - pyFaultCode: 'WARNING'
+                        pyFaultDetail: 'example_warning'
+                        pyFaultReason: 'Det här är ett exempelfel. Vänligen korrigera felet.'
+                  - pyID: '97245'
+                    StartDate: '2020-01-28'
+                    EndDate: '2020-08-18'
+                    Scope: 80
+                    SupportTypeCode: 'SEB'
+                    pySystemName: 'AIS'
+                    Conflicts:
+                    - pyFaultCode: 'ERROR'
+                      pyFaultDetail: 'conflict_scope_above_100'
+                      pyFaultReason: 'Det finns överlappande anvisning som meddelats Försäkringskassan och som tillsammans med aktuellt ärende överstiger 100 % i omfattning.'
+                    - pyFaultCode: 'WARNING'
+                      pyFaultDetail: 'example_warning'
+                      pyFaultReason: 'Det här är ett exempelfel. Vänligen korrigera felet.'
+        400:
+          description: "Bad request. Something wrong with input parameter values."
+          headers:
+            af-environment:
+              schema:
+                type: "string"
+            af-trackingid:
+              schema:
+                type: "string"
+            af-systemid:
+              schema:
+                type: "string"
+            af-enduserid:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBodyError'
+              example:
+                message: 'An error occurred while performing the conflict control.'
+                error_id: '457a5d70-801c-4767-9bcc-91e2a543288a'
+                cause:
+                  system: 'BAR-ExecutionConflicts'
+                  code: '400'
+                  message: 'Validering av inkommande parametrar misslyckades.'
+                  error:
+                  - pxObjClass: 'AF-Int-IPFResponse-Error'
+                    DisplayErrorMessage: 'Överlappningskontrollen stöder i dagsläget ej ABCDE.'
+                    ServiceName: 'BAR-ExecutionConflicts'
+        403:
+          description: "When service refuses to respond. For example when calling user does not have access to provided jobseeker."
+          headers:
+            af-environment:
+              schema:
+                type: "string"
+            af-trackingid:
+              schema:
+                type: "string"
+            af-systemid:
+              schema:
+                type: "string"
+            af-enduserid:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBodyError'
+              example:
+                message: 'An error occurred while performing the conflict control.'
+                error_id: '89cdfc4e-5342-4a53-abdd-4a7cdd3789ad'
+                cause:
+                  system: 'ArendeGetAsync'
+                  code: '403'
+                  message: 'Fel vid hämtning av ärenden från AIS:'
+                  error:
+                  - pxObjClass: 'AF-Int-IPFResponse-Error'
+                    PropertyName: ''
+                    ResponseCode: '403'
+                    ErrorId: ''
+                    DisplayErrorMessage: 'Inloggad handläggare saknar behörighet till arbetssökande'
+                    ServiceName: 'ArendeGetAsync'
+                    ResponseErrorMessage: ''
+                    ResponseErrorDescription: ''
+                  - pxObjClass: 'AF-Int-IPFResponse-Error'
+                    DisplayErrorMessage: 'Stöd kunde inte hämtas från AIS-Å.'
+                    ServiceName: 'AIS-Å ÄrendeGetAsync'
+        404:
+          description: 'When resource path is not correct.'
+          content:
+            text/html:
+              schema:
+                type: "string"
+              example:
+                'Resource not found'
+        500:
+          description: "When an internal error occurs."
+          headers:
+            af-environment:
+              schema:
+                type: "string"
+            af-trackingid:
+              schema:
+                type: "string"
+            af-systemid:
+              schema:
+                type: "string"
+            af-enduserid:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBodyError'
+              example:
+                message: 'An error occurred while performing the conflict control.'
+                error_id: '37eddb0c-e9a8-4731-bfc4-d1f180176a08'
+                cause:
+                  system: 'ConflictControl'
+                  code: ''
+                  message: ''
+                  error:
+                  - pxObjClass: 'AF-Int-IPFResponse-Error'
+                    DisplayErrorMessage: 'Överlappningskontroll kunde ej genomföras på grund av ett tekniskt fel.'
+                    ServiceName: 'ConflictControl'
+    delete:
+      tags:
+      - "BARWebSvcs"
+      parameters:
+      - name: "ssn"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "supporttype"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "af-trackingid"
+        in: "header"
+        description: "Transaction ID"
+        schema:
+          type: "string"
+      - name: "af-systemid"
+        in: "header"
+        description: "ID of consuming system"
+        schema:
+          type: "string"
+      - name: "af-enduserid"
+        in: "header"
+        description: "ID of consuming end user"
+        schema:
+          type: "string"
+      - name: "af-environment"
+        in: "header"
+        description: "Which environment the request concerns"
+        schema:
+          type: "string"
+      responses:
+        405:
+          description: "DELETE is not allowed."
+          headers:
+            allow:
+              schema:
+                type: "string"
+                enum:
+                - "\"POST\""
+            af-environment:
+              schema:
+                type: "string"
+            af-trackingid:
+              schema:
+                type: "string"
+            af-systemid:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                type: "object"
+    patch:
+      tags:
+      - "BARWebSvcs"
+      parameters:
+      - name: "ssn"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "supporttype"
+        in: "path"
+        description: ""
+        required: true
+        schema:
+          type: "string"
+      - name: "af-trackingid"
+        in: "header"
+        description: "Transaction ID"
+        schema:
+          type: "string"
+      - name: "af-systemid"
+        in: "header"
+        description: "ID of consuming system"
+        schema:
+          type: "string"
+      - name: "af-enduserid"
+        in: "header"
+        description: "ID of consuming end user"
+        schema:
+          type: "string"
+      - name: "af-environment"
+        in: "header"
+        description: "Which environment the request concerns"
+        schema:
+          type: "string"
+      responses:
+        405:
+          description: "PATCH is not allowed."
+          headers:
+            allow:
+              schema:
+                type: "string"
+                enum:
+                - "\"POST\""
+            af-environment:
+              schema:
+                type: "string"
+            af-trackingid:
+              schema:
+                type: "string"
+            af-systemid:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                type: "object"
+
+components:
+  schemas:
+    RequestBody:
+      description: JSON Schema for request body format
+      type: object
+      properties:
+        Request:
+          type: object
+          properties:
+            StartDate:
+              type: string
+            EndDate:
+              type: string
+            Scope:
+              type: integer
+            SupportsToIgnore:
+              type: array
+              items:
+                type: object
+                properties:
+                  Id:
+                    type: string
+    ResponseBody:
+      type: object
+      properties:
+        TotalResults:
+          type: integer
+        ConflictingCases:
+          type: array
+          items:
+            type: object
+            properties:
+              pyID:
+                type: string
+              StartDate:
+                type: string
+              EndDate:
+                type: string
+              Scope:
+                type: integer
+              SupportTypeCode:
+                type: string
+              pySystemName:
+                type: string
+              Conflicts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    pyFaultCode:
+                      type: string
+                    pyFaultDetail:
+                      type: string
+                    pyFaultReason:
+                      type: string
+    ResponseBodyError:
+      type: object
+      properties:
+        message:
+          type: string
+        error_id:
+          type: string
+        cause:
+          type: object
+          properties:
+            system:
+              type: string
+            code:
+              type: string
+            message:
+              type: string
+            error:
+              type: array
+              items:
+                type: object
+                properties:
+                  pxObjClass:
+                    type: string
+                  PropertyName:
+                    type: string
+                  ResponseCode:
+                    type: string
+                  ErrorId:
+                    type: string
+                  DisplayErrorMessage:
+                    type: string
+                  ServiceName:
+                    type: string
+                  ResponseErrorMessage:
+                    type: string
+                  ResponseErrorDescription:
+                    type: string
